@@ -1,0 +1,6 @@
+# Required for basic mode 
+sudo apt install iproute -y
+
+#Required for BW test mode
+
+sudo apt install iperf3 -y

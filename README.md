@@ -1,4 +1,4 @@
-# network_throttler
+# Network throttler
 Control the bandwidth on your Server/testing machine using this throttler, built with the linux traffic controller
 
 If client requirement is to load a page @ 1mbps line and your testing team is testing on a 50 mbps and having trouble getting UAT signoffs, you need to throttle the testing server or the machine network to match what is there in the SLAs
