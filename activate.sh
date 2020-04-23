@@ -15,14 +15,9 @@
 #delay: the network property that is modified
 #200ms: introduce delay of 200 ms
 
-echo "#######Throttler started #########"
-echo ""
-echo "Checking the options passed.. target BW shouuld be in bits only kbit or mbit"
-echo "e.g activate.sh -i=eth0 -b=1mbit "
-echo ""
-echo "###################################"
-latency=0ms
-delay=0
+
+delay=0ms
+iperfserver=192.168.1.5
 
 for i in "$@"
 do
@@ -46,32 +41,66 @@ case $i in
     *)
           # unknown option
           echo "script usage: For BW Throttle $(basename $0) [-i=eth0 ] [-b=200kbit] " >&2
+          echo ""
       echo "script usage: For Delay  $(basename $0) [-i=eth0 ] [-d=200ms] " >&2
       echo ""
+
+      echo "Add --bwtest if you want to run a bandwidht test also while throttling"
+      echo ""
+      echo " ./activate.sh -i=eth0 -b=200kbit --bwtest"
+     
+        echo ""
+        echo "** --bwtest valid only for the bandwidth throttle mode , it runs a default for delay mode**"
+      exit
     
     ;;
 esac
 done
 
-      
+
+
+echo "#######Throttler started #########"
+echo ""
+echo "Checking the options passed.. target BW shouuld be in bits only kbit or mbit"
+echo "e.g activate.sh -i=eth0 -b=1mbit "
+echo ""
+echo "###################################"
+
+
 
 
 
 #echo "values " $bw $delay $interface
 
 
-    if [ $delay -ne 0 ] ; then
+    if [ $delay != "0ms" ] ; then
     echo "Before delay "
     echo "============="
-    echo "Checking pacet delay before setting"
-    ping -q -c 5 google.com |grep ms
+    echo "Checking packet delay before setting"
+    echo""
+    ping -q -c 5 google.com |grep avg
     tc qdisc add dev $interface root netem delay $delay
-    echo "Delay set ......."
+    
+  
+    if [ "$?" -ne 0 ] ; then
+    
+    echo "Couldnt set delay  , try deactivation script first "
+    echo ""
+
+    echo "Will exit now .. "
+    exit
+    else
+    echo ""
+    fi
+
+    echo "Delay set .......Sucess"
+    echo""
     echo " Device status after delay set "
+    echo""
     tc qdisc show  dev $interface   
     echo ""
     echo "######Checking the packet latency now......###"
-    ping -q -c 5 google.com |grep ms
+    ping -q -c 5 google.com |grep avg
 
     echo ""
     echo "To reset the delay , run $./deactivate.sh " 
@@ -89,7 +118,7 @@ rulecount=`tc qdisc show  dev $interface |grep fifo|wc -l`
 
 if [ "$bwtest" = "YES" ] ; then
 echo "#Checking existing bandwidth#"
-iperf3 -c 192.168.1.5 |grep 'sender\|receiver' 
+iperf3 -c $iperfserver |grep 'sender\|receiver' 
 echo ""
 fi
 
@@ -102,7 +131,7 @@ tc qdisc add dev $interface root tbf rate $bw burst 32kbit latency 400ms
 
 if [ "$bwtest" = "YES" ] ; then
 echo "Checking new bandwidth after rules applied"
-iperf3 -c 192.168.1.5 |grep 'sender\|receiver' 
+iperf3 -c $iperfserver |grep 'sender\|receiver' 
 fi
 
 echo "####Bandwidth throttled to $bw"

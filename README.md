@@ -32,4 +32,37 @@ netmask 255.255.255.0
 gateway IP of the above linux box 
 
 
+##Sample runs
+
+###Without BW  test mode
+
+./activate.sh -i=eth0 -b=200kbit 
+#######Throttler started #########
+
+Checking the options passed.. target BW shouuld be in bits only kbit or mbit
+e.g activate.sh -i=eth0 -b=1mbit 
+
+###################################
+Existing rule is default
+####Bandwidth throttled to 200kbit
+
+
+###With BW Test mode 
+
+./activate.sh -i=eth0 -b=200kbit --bwtest
+#######Throttler started #########
+
+Checking the options passed.. target BW shouuld be in bits only kbit or mbit
+e.g activate.sh -i=eth0 -b=1mbit 
+
+###################################
+#Checking existing bandwidth#
+[  7]   0.00-10.00  sec  5.39 MBytes  4.52 Mbits/sec    9             sender
+[  7]   0.00-11.66  sec  4.50 MBytes  3.24 Mbits/sec                  receiver
+
+Existing rule is default
+Checking new bandwidth after rules applied
+[  7]   0.00-10.01  sec   351 KBytes   287 Kbits/sec    0             sender
+[  7]   0.00-10.61  sec   239 KBytes   184 Kbits/sec                  receiver
+####Bandwidth throttled to 200kbit
 
