@@ -32,9 +32,11 @@ netmask 255.255.255.0
 gateway IP of the above linux box 
 
 
-##Sample runs
+Sample runs
+============
 
-###Without BW  test mode
+Without BW  test mode
+====================
 
 ./activate.sh -i=eth0 -b=200kbit 
 #######Throttler started #########
@@ -47,7 +49,8 @@ Existing rule is default
 ####Bandwidth throttled to 200kbit
 
 
-###With BW Test mode 
+With BW Test mode 
+===================
 
 ./activate.sh -i=eth0 -b=200kbit --bwtest
 #######Throttler started #########
