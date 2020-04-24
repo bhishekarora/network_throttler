@@ -17,7 +17,7 @@
 
 
 delay=0ms
-iperfserver=192.168.1.5
+iperfserver=iperf.he.net
 
 for i in "$@"
 do
