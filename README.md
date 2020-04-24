@@ -110,5 +110,12 @@ gateway IP of the above linux box
 > UseCase Client has an SLA that the packet delay from your server to
 > the end users on remote sites should not be this much milliseconds
 
+##Gotchas..
 ** If you are not hosting your own iperf3 server and test with --bwtest option you will 
 have to use the public server US based and it might be busy running other tests, so you might have to run the script  multiple times**
+
+** It will work only if your interfaces have default rules and no  custom  bandwidth
+shaping is specified** 
+
+e.g your queue discipline should have default FIFO rule and not custom bw shaping rules
+tc qdisc show  dev ifacename ==> should show FIFI kind of  rule to get this tool working..
